@@ -75,7 +75,7 @@ function checkLetter(userGessBtn){
     const classLetterLi = document.getElementsByClassName('letter'); //console.log(classLetterLi);
 
     for (let i = 0; i < classLetterLi.length; i++) {
-        if( classLetterLi[i].innerText.toLowerCase === userGessBtn.toLowerCase){
+        if( classLetterLi[i].innerText.toLowerCase() === userGessBtn.toLowerCase()){
             //add show class just to the matched letter?
             classLetterLi[i].classList.add('show');
             console.log(classLetterLi[i]);
@@ -85,4 +85,4 @@ function checkLetter(userGessBtn){
     return classLetterLi; 
 
 }
-checkLetter('E');
+checkLetter('a');
