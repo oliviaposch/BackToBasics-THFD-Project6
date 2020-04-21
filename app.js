@@ -1,6 +1,6 @@
-const keyBoard = document.getElementById('qwerty'); //console.log(keyBoard);
 const lettersButtonsContainer = document.getElementById('phrase'); // buttons container UL for the single letter 
 let missed = 0; // to track the guesses the player has missed 
+const keyBoard = document.getElementById('qwerty'); 
 
 //eventListener start game
 const overlay = document.getElementById('overlay');
@@ -72,17 +72,44 @@ addPhraseToDisplay(phrasesArrChars);
  */
 function checkLetter(userGessBtn){
 
-    const classLetterLi = document.getElementsByClassName('letter'); //console.log(classLetterLi);
-
+    const classLetterLi = document.getElementsByClassName('letter');
+    let usersMatchedLetter;
+    
     for (let i = 0; i < classLetterLi.length; i++) {
         if( classLetterLi[i].innerText.toLowerCase() === userGessBtn.toLowerCase()){
-            //add show class just to the matched letter?
-            classLetterLi[i].classList.add('show');
-            console.log(classLetterLi[i]);
+            
+            classLetterLi[i].classList.add('show'); 
+            usersMatchedLetter = classLetterLi[i].innerText; //console.log(usersMatchedLetter);
+          
+        }
+    }
+    console.log(usersMatchedLetter);
+
+    return usersMatchedLetter;       
+}
+//checkLetter('n');
+/**
+ * Event Listener to the keyboard
+ * when Btn has been clicked add 'choosen class' and Attr 'dsabled
+ * passing the Btn to checkLetter Func. And stored it in a Var. called 'letterFound' 
+ */
+
+keyBoard.addEventListener('click', (e) => {
+    if(e.target.tagName == 'BUTTON'){
+        e.target.className = 'chosen';
+        if(e.target.classList.contains('chosen')){
+            e.target.setAttribute('disabled', true);
+            let letterFound = checkLetter(e.target.innerText);
+            /**
+            * Count the missed guesses
+            * if checkletter func. return null: wrong gessed letter
+            * 1. statement to check the value of the letterfound Var. 
+            * if valeu null : remove one of the tries from scoreboard
+            * we need the missed Var. (remove try from scoreboard means increase the missedCount by 1)
+            */
         }
         
     }
-    return classLetterLi; 
+   
+})
 
-}
-checkLetter('a');
