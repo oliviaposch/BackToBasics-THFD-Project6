@@ -73,7 +73,7 @@ addPhraseToDisplay(phrasesArrChars);
 function checkLetter(userGessBtn){
 
     const classLetterLi = document.getElementsByClassName('letter');
-    let usersMatchedLetter;
+    let usersMatchedLetter = null;
     
     for (let i = 0; i < classLetterLi.length; i++) {
         if( classLetterLi[i].innerText.toLowerCase() === userGessBtn.toLowerCase()){
@@ -83,7 +83,6 @@ function checkLetter(userGessBtn){
           
         }
     }
-    console.log(usersMatchedLetter);
 
     return usersMatchedLetter;       
 }
@@ -93,13 +92,21 @@ function checkLetter(userGessBtn){
  * when Btn has been clicked add 'choosen class' and Attr 'dsabled
  * passing the Btn to checkLetter Func. And stored it in a Var. called 'letterFound' 
  */
-
+const scoreBoard = document.getElementsByTagName('tries');
+const triesImg = document.querySelector('.tries img');
 keyBoard.addEventListener('click', (e) => {
     if(e.target.tagName == 'BUTTON'){
         e.target.className = 'chosen';
         if(e.target.classList.contains('chosen')){
             e.target.setAttribute('disabled', true);
             let letterFound = checkLetter(e.target.innerText);
+            
+            if(letterFound === null){
+                //console.log(triesImg.src);
+                triesImg.src = "images/lostHeart.png";
+                missed++
+                console.log(missed);
+            }
             /**
             * Count the missed guesses
             * if checkletter func. return null: wrong gessed letter
