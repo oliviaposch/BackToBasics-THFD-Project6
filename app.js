@@ -1,15 +1,10 @@
 const lettersButtonsContainer = document.getElementById('phrase'); // buttons container UL for the single letter 
 let missed = 0; // to track the guesses the player has missed 
 const keyBoard = document.getElementById('qwerty'); 
-
-//eventListener start game
+const scoreBoard = document.getElementsByClassName('tries');
 const overlay = document.getElementById('overlay');
-overlay.addEventListener('click', (e) => {
-    if(e.target.className == 'btn__reset'){
-        overlay.style.display = 'none';
-    }
-    
-});
+
+
 //phrases Array
 const phrasesArr = [
     'Easy Peasy',
@@ -18,6 +13,41 @@ const phrasesArr = [
     'A penny for your thoughts',
     'A piece of cake'
 ];
+
+/**
+ * Reset Function
+ */
+function resetGame(){
+ 
+    /*
+    //remove class chosen
+    //remove Class show
+    //missed class set to 0
+    
+    const removeShowClass = document.getElementsByClassName('keyrow'); //array of classes
+     for (let index = 0; index < removeShowClass.length; index++) {
+         const element = removeShowClass[index].children; 
+         if(element.classList.contains('chosen')){
+             element.classList.remove('chosen');
+         }else{
+             console.log(' no foundS');
+         }
+         
+         
+     }
+     console.log(removeShowClass.length); */
+ 
+ }
+ 
+ //eventListener start game
+overlay.addEventListener('click', (e) => {
+    if(e.target.className == 'btn__reset'){
+        overlay.style.display = 'none';
+        //reset function
+    }
+    
+});
+
 /**
  * randomly phrasesArr array
  * choose a phrase
@@ -86,37 +116,77 @@ function checkLetter(userGessBtn){
 
     return usersMatchedLetter;       
 }
-//checkLetter('n');
+
 /**
  * Event Listener to the keyboard
  * when Btn has been clicked add 'choosen class' and Attr 'dsabled
  * passing the Btn to checkLetter Func. And stored it in a Var. called 'letterFound' 
  */
-const scoreBoard = document.getElementsByTagName('tries');
-const triesImg = document.querySelector('.tries img');
+
 keyBoard.addEventListener('click', (e) => {
     if(e.target.tagName == 'BUTTON'){
         e.target.className = 'chosen';
         if(e.target.classList.contains('chosen')){
             e.target.setAttribute('disabled', true);
-            let letterFound = checkLetter(e.target.innerText);
+            let letterFound = checkLetter(e.target.innerText); 
             
-            if(letterFound === null){
-                //console.log(triesImg.src);
-                triesImg.src = "images/lostHeart.png";
-                missed++
-                console.log(missed);
-            }
-            /**
+             /**
             * Count the missed guesses
             * if checkletter func. return null: wrong gessed letter
             * 1. statement to check the value of the letterfound Var. 
             * if valeu null : remove one of the tries from scoreboard
             * we need the missed Var. (remove try from scoreboard means increase the missedCount by 1)
             */
+            if(letterFound === null){ 
+                missed++;
+                
+                if(missed === 1){
+                    scoreBoard[0].getElementsByTagName('img')[0].src = 'images/lostHeart.png';
+                }
+                if(missed === 2){
+                    scoreBoard[1].getElementsByTagName('img')[0].src = 'images/lostHeart.png';
+                }
+                if(missed === 3){
+                    scoreBoard[2].getElementsByTagName('img')[0].src = 'images/lostHeart.png';
+                }
+                if(missed === 4){
+                    scoreBoard[3].getElementsByTagName('img')[0].src = 'images/lostHeart.png';
+                }
+                if(missed === 5){
+                    scoreBoard[4].getElementsByTagName('img')[0].src = 'images/lostHeart.png';
+                }
+            
+            }
+           
+           
         }
         
     }
+    checkWin();
    
 })
 
+/**
+ * checkWin Func.
+ * is number of class SHOW = numeber of letters with class Letters?
+ * if iqual show win overlay ID with win:CLASS and text 'Win'exemplo
+ * otherwise, if number of misses  >= 5 SHOW overlay 'lose' CLASS and text 'lose' exemplo
+ */
+function checkWin() {
+    const showClassArr = document.getElementsByClassName('show');
+    const letterClassArr = document.getElementsByClassName('letter');
+    
+    if(showClassArr.length === letterClassArr.length){
+        overlay.className = 'win';
+        overlay.style.display = 'flex';
+        overlay.firstElementChild.innerText = 'Congratulations you won the Game!';
+        overlay.lastElementChild.innerText = 'Play again!';
+        //resetGame();
+    }
+    if(missed === 5){
+        overlay.className = 'lose';
+        overlay.style.display = 'flex';
+        overlay.firstElementChild.innerText = 'Game over!';
+        overlay.lastElementChild.innerText = 'Try again!';
+    }
+}
