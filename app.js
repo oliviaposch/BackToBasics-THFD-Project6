@@ -3,12 +3,13 @@ let missed = 0; // to track the guesses the player has missed
 const keyBoard = document.getElementById('qwerty'); 
 const scoreBoard = document.getElementsByClassName('tries');
 const overlay = document.getElementById('overlay');
+const resetUl = document.querySelector('#phrase ul');
 let letterFound = '';
 
 //phrases Array
 const phrasesArr = [
     'Easy Peasy',
-    'The ball is in your cort',
+    'The ball is in your court',
     'hit the hay',
     'A penny for your thoughts',
     'A piece of cake'
@@ -52,15 +53,39 @@ function addPhraseToDisplay(arr){
 
 /**
  * Reset Function
+ * reset the UL List 
+ * new Random of phrases 
+ * remove the classes chosen and disabled Attr.
+ * reset hearts
  */
+//extending Element prototype
+Element.prototype.removeAttributes = function(...attrs) {
+    attrs.forEach(attr => this.removeAttribute(attr))
+  }
 function resetGame(){
+    resetUl.innerHTML = '';
     const phrasesArrChars = getRandomPhraseAsArray(phrasesArr);
     addPhraseToDisplay(phrasesArrChars);
-    
+
+    //reset classes from keyboard
+    const resetTagButtonClasses = keyBoard.getElementsByTagName('button');
+    for (let i = 0; i < resetTagButtonClasses.length; i++) {
+        if(resetTagButtonClasses[i].hasAttribute('disabled')){
+            resetTagButtonClasses[i].removeAttributes('disabled', 'class');
+        }
+    }
+
+    //reset hearts
+    const resetImages = document.getElementsByClassName('tries'); 
+    for (let index = 0; index < resetImages.length; index++) {
+        resetImages[index].children[0].src = 'images/liveHeart.png';
+    }
+
     letterFound = '';
     missed = 0;
  
  }
+ 
 
 /**
  *  eventListener start game
@@ -149,22 +174,22 @@ keyBoard.addEventListener('click', (e) => {
  * is number of class SHOW equal number of letters with class Letters?
  * if number of misses  === 5 SHOW overlay 'lose' 
  */
+function checkWinBtns(classN, fText, lText){
+    overlay.className = classN;
+    overlay.style.display = 'flex';
+    overlay.firstElementChild.innerText = fText;
+    overlay.lastElementChild.innerText = lText;
+}
 function checkWin() {
     const showClassArr = document.getElementsByClassName('show');
     const letterClassArr = document.getElementsByClassName('letter');
     
     if(showClassArr.length === letterClassArr.length){
-        overlay.className = 'win';
-        overlay.style.display = 'flex';
-        overlay.firstElementChild.innerText = 'Congratulations you won the Game!';
-        overlay.lastElementChild.innerText = 'Play again!';
+        checkWinBtns('win', 'Congratulations you won the Game!', 'Play again!');
         
     }
     if(missed === 5){
-        overlay.className = 'lose';
-        overlay.style.display = 'flex';
-        overlay.firstElementChild.innerText = 'Game over!';
-        overlay.lastElementChild.innerText = 'Try again!';
-        
+        checkWinBtns('lose', 'Game over!', 'Try again!');
+    
     }
 }
