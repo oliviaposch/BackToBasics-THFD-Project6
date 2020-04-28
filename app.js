@@ -1,7 +1,7 @@
 const lettersButtonsContainer = document.getElementById('phrase'); // buttons container UL for the single letter 
 let missed = 0; // to track the guesses the player has missed 
 const keyBoard = document.getElementById('qwerty'); 
-const scoreBoard = document.getElementsByClassName('tries');
+const scoreBoard = document.getElementsByClassName('tries'); console.log(scoreBoard);
 const overlay = document.getElementById('overlay');
 const resetUl = document.querySelector('#phrase ul');
 let letterFound = '';
@@ -130,35 +130,22 @@ function checkLetter(userGessBtn){
  */
 
 keyBoard.addEventListener('click', (e) => {
-    if(e.target.tagName == 'BUTTON'){
-        e.target.className = 'chosen';
-        if(e.target.classList.contains('chosen')){
-            e.target.setAttribute('disabled', true);
-            letterFound = checkLetter(e.target.innerText); 
+    if(e.target.tagName === 'BUTTON'){
+        const button = e.target;
+        button.className = 'chosen';
+        if(button.classList.contains('chosen')){
+            button.setAttribute('disabled', true);
+            letterFound = checkLetter(button.innerText); //or innerHTML
             
              /**
             * Count the missed guesses 
             * if valeu null : remove one of the tries from scoreboard | and increase missed class
             */
-            if(letterFound === null){ 
+            if(letterFound === null && missed <= 5){ //if both are true
+
+                //use current number of missed variable to get the index position of the score .
+                scoreBoard[missed].firstChild.src = 'images/lostHeart.png'; 
                 missed++;
-                
-                if(missed === 1){
-                    scoreBoard[0].getElementsByTagName('img')[0].src = 'images/lostHeart.png';
-                }
-                if(missed === 2){
-                    scoreBoard[1].getElementsByTagName('img')[0].src = 'images/lostHeart.png';
-                }
-                if(missed === 3){
-                    scoreBoard[2].getElementsByTagName('img')[0].src = 'images/lostHeart.png';
-                }
-                if(missed === 4){
-                    scoreBoard[3].getElementsByTagName('img')[0].src = 'images/lostHeart.png';
-                }
-                if(missed === 5){
-                    scoreBoard[4].getElementsByTagName('img')[0].src = 'images/lostHeart.png';
-                }
-            
             }
            
            
